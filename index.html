@@ -1,0 +1,499 @@
+</head><!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>English Learning……</title>
+  <style type="text/css">
+  body{
+	background:url("pic/bg2.jpg") no-repeat;
+	position: relative;
+	color:rgb(63, 75, 73);
+	}
+	#head{
+	height:100px;
+	text-align:center;
+	line-height:100px;
+	font-size:30px;
+	color:rgb(118, 137, 143);
+	text-shadow:rgb(50, 42, 37) 2px 2px;
+	}
+	.menu{
+	background:rgba(260,200,200,0.2);
+	}
+	#menu1,#menu2,#menu3,#menu4{
+	width:99%;
+	height:500px;
+	font-size:20px;
+	}
+	#menu4{
+	text-align:center;
+	}
+	#searchMenu,#readMenu{
+	margin-top:50px;
+	text-align:center;
+	}
+	#menu5{
+	height:100px;
+	text-align:center;
+	font-size:30px;
+	color:rgb(214, 214, 215);
+	}
+	#menu01{
+	width:200px;
+	height:500px;
+	margin-left:auto;
+	margin-right:auto;
+	}
+	.but1{
+	margin-top:50px;
+	width:200px;
+	height:65px;
+	font-size:30px;
+	}
+	.but2{
+	margin-top:30px;
+	margin-left:250px;
+	}
+	#op{
+	margin-left:50px;
+	text-align:center;
+	width:200px;
+	height:50px;
+	font-size:30px;
+	}
+	.but3{
+	margin-top:30px;
+	margin-right:150px;
+	}
+	.but4{
+	margin-left:1200px;
+	}
+	.but2,.but3,.but4{
+	width:150px;
+	height:50px;
+	font-size:30px;
+	}
+	.but1,.but2,.but3,.but4{
+	background-color:rgba(200,200,200,0.3);
+	color:rgb(75, 83, 86);
+	border:3px solid rgb(130, 149, 154);
+	}
+	.button:hover{
+	background-color:rgba(164, 184, 189);
+	}
+	#back1,#back2,#back3,#next1{
+	margin:0;
+	float:right;
+	}
+	#down_up,#random{
+	margin:0;
+	float:left;
+	}
+	.clearfix:after{
+        content: "";
+        display: block;
+        height: 0;
+        clear:both;
+        visibility: hidden;
+    }
+    .clearfix{
+        *zoom: 1;
+    }
+	#n&p{
+	width:100%;
+	}
+	#pre,#next{
+	margin:0;
+	width:37%;
+	height:400px;
+	}
+	#pre{
+	float:left;
+	}
+	#next{
+	float:right;
+	}
+	#seac{
+	width:600px;
+	
+	margin-left:600px;
+	}
+	#problem{
+	font-size:50px;
+	}
+	#ans{
+	margin-left:30px;
+	}
+	#answer{
+	width:200px;
+	height:50px;
+	font-size:25px;
+	text-align:center;
+	}
+	#submit{
+	margin-left:0;
+	}
+	#result{
+	font-size:25px;
+	color:red;
+	}
+	
+  </style>
+  <script src="words.js">
+  <!--
+	
+  //-->
+  </script>
+  <script type="text/javascript">
+  <!--
+	
+	var words = [];
+	var Phonetic = [];
+	var Chinese = [];
+	var word ={English:"",
+			  phonetic:"",
+			  Chinses:"",
+			  };
+	
+	window.onload = function(){
+		var startDom = document.querySelector("input#start");
+		var searchDom = document.querySelector("input#search");
+		var testDom = document.querySelector("input#test");
+		var menu1Dom = document.querySelector("div#menu1");
+		var menu2Dom = document.querySelector("div#menu2");
+		var menu3Dom = document.querySelector("div#menu3");
+		var menu4Dom = document.querySelector("div#menu4");
+
+		var dateDom = document.querySelector("#id");
+		var myDate = new Date();
+		dateDom.textContent += myDate.getFullYear() +'/' + (myDate.getMonth()+1) +'/' + myDate.getDate(); 
+
+
+		//将en6中的单词部分提取出来放在words数组中
+		for(var i = 0 ; i < en6.length ; i ++){
+			var start = en6[i].indexOf("/");
+			var end = en6[i].lastIndexOf("/");
+			words[i] = en6[i].slice(0,start);
+			Phonetic[i] = en6[i].slice(start,end+1);
+			Chinese[i] = en6[i].slice(end);
+		}
+		
+		menu2Dom.style.display = "none";
+		menu3Dom.style.display = "none";
+		menu4Dom.style.display = "none";
+	
+		//点击学习单词按钮
+		startDom.onclick = function(){
+			menu1Dom.style.display = "none";
+			menu2Dom.style.display = "block";
+			//alert("点击单词左右侧空白处切换单词");
+
+			var preDom = document.querySelector("div#pre");
+			var nextDom = document.querySelector("div#next");
+			var warningDom = document.querySelector("#warning");
+			var back1Dom = document.querySelector("input#back1");
+			var down_upDom = document.querySelector("input#down_up");
+			var randomDom  = document.querySelector("input#random");
+
+			var ran = 0;
+			var dp = 0;
+			var alert1 = 0;
+			var preWords = [];
+			var s = 0;
+			var flag = true;
+			
+			var rEnglishDom = document.querySelector("h1#rEnglish");
+			var rPhoneticDom = document.querySelector("h5#rPhonetic");
+			var rChineseDom = document.querySelector("h3#rChinese");
+			rEnglishDom.textContent = words[ran];
+			rPhoneticDom.textContent = Phonetic[ran];
+			rChineseDom.textContent = Chinese[ran];
+		
+			//点击上一个
+			preDom.onclick = function(){
+				//此时单词有序
+				if(flag == true){
+					warningDom.textContent = null;
+					ran --;
+					if(down_up.value == "改为升序"){
+						alert1 ++;
+					}
+					if(ran < 0){
+						ran = 0;
+						warningDom.textContent = ("已经是第一个单词！");
+					}
+					else{
+						search(words[ran]);
+						rEnglishDom.textContent = word.English;
+						rPhoneticDom.textContent = word.phonetic;
+						rChineseDom.textContent = word.Chinese;
+					}
+				}
+				//此时单词乱序
+				else{
+					warningDom.textContent = null;
+					if(s < 0){
+						warningDom.textContent = ("已经是第一个单词！");
+					}
+					else{
+						s --;
+						search(preWords[s]);
+						rEnglishDom.textContent = word.English;
+						rPhoneticDom.textContent = word.phonetic;
+						rChineseDom.textContent = word.Chinese;
+						
+					}
+				}
+			};
+			
+			//点击下一个
+			nextDom.onclick = function(){
+				//此时单词有序
+				if(flag == true){
+					warningDom.textContent = null;
+					ran ++;
+					if(down_up.value == "改为降序"){
+						alert1 ++;
+					}
+					if(ran > words.length-1){
+						ran = words.length-1;
+						warningDom.textContent = ("已经是最后一个单词！");
+					}
+					else{
+						search(words[ran]);
+						rEnglishDom.textContent = word.English;
+						rPhoneticDom.textContent = word.phonetic;
+						rChineseDom.textContent = word.Chinese;
+					}
+				}
+				//此时单词乱序
+				else{
+					warningDom.textContent = null;
+					randomWords(rEnglishDom,rPhoneticDom,rChineseDom);
+					preWords[s] = words[ran];
+					alert1 ++;
+					s ++;
+				}
+			};
+			//点击升/降序按钮
+			down_upDom.onclick = function(){
+				flag = true;
+				dp ++;
+				if(dp % 2 == 0){
+					down_up.value = "改为降序";
+					ran = 0;
+				}
+				else{
+					down_up.value = "改为升序";
+					ran = words.length - 1;
+				}
+				rEnglishDom.textContent = words[ran];
+				rPhoneticDom.textContent = Phonetic[ran];
+				rChineseDom.textContent = Chinese[ran];
+			};
+			//点击打乱顺序按钮
+			randomDom.onclick = function(){
+				randomWords(rEnglishDom,rPhoneticDom,rChineseDom);
+				preWords[s] = words[ran];
+				flag = false;
+				s ++;
+			};
+
+			//学习单词页面点击返回按钮
+			back1Dom.onclick = function(){
+				var menu1Dom = document.querySelector("div#menu1");
+				var menu2Dom = document.querySelector("div#menu2");
+				menu1Dom.style.display = "block";
+				menu2Dom.style.display = "none";
+				alert("你已经学习了" + alert1 + "个单词");
+			};
+	};
+	
+		//点击查询按钮
+	searchDom.onclick = function(){
+		menu1Dom.style.display = "none";
+		menu3Dom.style.display = "block";
+		
+		var search1Dom = document.querySelector("input#search1");
+		
+		//点击搜索按钮
+		search1Dom.onclick = function(){
+
+			var sEnglishDom = document.querySelector("h1#sEnglish");
+			var sPhoneticDom = document.querySelector("h5#sPhonetic");
+			var sChineseDom = document.querySelector("h3#sChinese");
+			var str = op.value;
+			search(str);
+			sEnglishDom.textContent = word.English;
+			sPhoneticDom.textContent = word.phonetic;
+			sChineseDom.textContent = word.Chinese;
+		};
+	};
+	//点击测试按钮
+	testDom.onclick = function(){
+		menu1Dom.style.display = "none";
+		menu4Dom.style.display = "block";
+
+		var ran1 = Math.round(Math.random()*5488);
+		var str1 = words[ran1];
+		var sum = 0;
+		var score = 0;
+		cProblemDom = document.querySelector("#cProblem");
+		pProblemDom = document.querySelector("#pProblem");
+		cProblemDom.textContent = Chinese[ran1];
+		pProblemDom.textContent = Phonetic[ran1];
+		
+		var submitDom = document.querySelector("#submit");
+		var next1Dom = document.querySelector("#next1");
+		var resultDom = document.querySelector("#result");
+		var ansDom = document.querySelector("input#answer");
+		var back3Dom = document.querySelector("input#back3");
+		var str3 = answer.value;
+
+		//点击确定按钮
+		submitDom.onclick = function(){
+			if(answer.value == words[ran1]){
+				resultDom.textContent = "恭喜你，答对了！";
+				score ++;
+			}
+			else{
+				resultDom.textContent = "你答错了，正确答案是："+words[ran1];
+			}
+		};
+
+		//点击下一个按钮
+		next1Dom.onclick = function(){
+			answer.value = null;
+			resultDom.textContent = null;
+			ran1 = Math.round(Math.random()*5488);
+			str1 = words[ran1];
+			cProblemDom.textContent = Chinese[ran1];
+			pProblemDom.textContent = Phonetic[ran1];
+			sum ++;
+		};
+		
+		//单词测试页面点击返回按钮
+		back3Dom.onclick = function(){
+			var menu1Dom = document.querySelector("div#menu1");
+			var menu4Dom = document.querySelector("div#menu4");
+			menu1Dom.style.display = "block";
+			menu4Dom.style.display = "none";
+			alert("你一共测试了" + sum + "个单词，你答对了" + score + "个");
+		};
+	
+		};
+	};
+	//所有返回按钮
+	function back(){
+		var menu1Dom = document.querySelector("div#menu1");
+		var menu2Dom = document.querySelector("div#menu2");
+		var menu3Dom = document.querySelector("div#menu3");
+		var menu4Dom = document.querySelector("div#menu4");
+		menu1Dom.style.display = "block";
+		menu2Dom.style.display = "none";
+		menu3Dom.style.display = "none";
+		menu4Dom.style.display = "none";
+	};
+	
+	//输入英文查找音标和中文
+	function search(str){
+		var i = 0;
+		for(i = 0 ; i < words.length ; i++ ){
+			if(str == words[i]){
+				break;
+			}
+		}
+		word.English = words[i];
+		word.phonetic = Phonetic[i];
+		word.Chinese = Chinese[i];
+	};
+
+	//随机生成单词
+	function randomWords(rEnglishDom,rPhoneticDom,rChineseDom){
+		ran = Math.floor(Math.random()*5498) - 1;
+		rEnglishDom.textContent = words[ran];
+		rPhoneticDom.textContent = Phonetic[ran];
+		rChineseDom.textContent = Chinese[ran];
+	};
+	
+//-->
+  </script>
+ </head>
+ <body>
+  <div id="head" class="">
+	<h1>Words Learning App</h1>
+  </div>
+
+  <div id="menu1" class="menu">
+	<div id="menu01" class="">
+		<input id="search" type="button" value="查找单词" class="but1 button">
+		<input id="start" type="button" value="学习单词" class="but1 button">
+		<input id="test" type="button" value="单词测试" class="but1 button">
+	</div>
+	</div>
+
+  <div id="menu2" class="menu">
+	<div id="bac1" class="clearfix">
+		<input id="down_up" type="button" value="改为降序" class="but2 button">
+		<input id="random" type="button" value="打乱顺序" class="but2 button">
+		<input id="back1" type="button" value="返回" class="but2 button">
+	</div>
+	<div id="pre" class="">
+	</div>
+	<div id="next" class="">
+	</div>
+	
+	<div id="readMenu" class="">
+		<h1 id="warning"></h1>
+		<h1 id="rEnglish"></h1>
+		<h5 id="rPhonetic"></h5>
+		<h3 id="rChinese"></h3>
+	</div>
+	
+  </div>
+  
+
+  <div id="menu3" class="menu"> 
+  <div id="" class="clearfix">
+	<input id="back2" type="button" value="返回" class="but3 button" onclick="back()">
+  </div>
+	<div id="seac" class="">
+		<input id="op" type="text" value="">
+	<input id="search1" type="button" value="搜索" class="but3 button">
+	</div>
+	
+	<div id="searchMenu" class="">
+		<h1 id="sEnglish"></h1>
+		<h5 id="sPhonetic"></h5>
+		<h3 id="sChinese"></h3>
+	</div>
+
+  </div>
+
+  <div id="menu4" class="menu">
+	 <input id="back3" type="button" value="返回" class="but4 button" onclick="back3()">
+	 <br>
+	<h1 id="cProblem"></h1>
+	<h5 id="pProblem"></h5>
+	<br>
+	<h3 id="pleaseEnter">请根据音标和中文意思写出相对应的单词：</h3>
+
+	<div id="ans" class="">
+		<input id="answer" type="text" value="">
+		<input id="submit" type="button" value="确定" class="but4 button">
+	</div>
+
+	<p id="result"></p>
+	<input id="next1" type="button" value="下一个" class="but4 button">
+  </div>
+
+  <div id="menu5" class="">
+	<p id="id">Code By 20192978丁宁 of 19计算机一班 on </p>
+  </div>
+ </body>
+</html>
+
+ <body>
+  
+ </body>
+</html>
